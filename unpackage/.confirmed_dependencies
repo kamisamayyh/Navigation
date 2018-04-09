@@ -1,0 +1,13 @@
+{
+  "main.html": {
+    "refer": [
+      "setting.html",
+      "navigation.html"
+    ]
+  },
+  "login.html": {
+    "refer": [
+      "main.html"
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		
+	</head>
+
+	<body>
+		
+		<div id="navigationMap" style="height: 40vh;position: relative;top: 40px;"></div>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">导航</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab">
+			<a id="toTransit" class="mui-tab-item mui-active" href="#transit">
+				<span class="mui-tab-label">公交</span>
+			</a>
+			<a id="toDrive" class="mui-tab-item" href="#drive">
+				<span class="mui-tab-label">驾车</span>
+			</a>
+			<a id="toWalk" class="mui-tab-item" href="#walk">
+				<span class="mui-tab-label">步行</span>
+			</a>
+		</nav>
+		<div class="mui-content">
+			<div id="transit" class="mui-control-content mui-active">
+				
+			</div>
+			<div id="drive" class="mui-control-content"></div>
+			<div id="walk" class="mui-control-content "></div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+        <script src="http://api.map.baidu.com/api?v=2.0&ak=aIlRouzbSsA9LmGZ4pTXOK0vB9PoiypY"></script>
+		<script src="js/map.js"></script>
+		
+		<script type="text/javascript">
+			mui.init();
+			var myAddress;
+			var toAddress;
+ 			var Map = new Map();
+ 			Map.initMap();
+ 			Map.createMap();
+ 			mui.plusReady(function() {
+				Map.positionMe(function(){
+					
+				});
+			})
+			document.getElementById('toTransit').addEventListener('tap', function() {
+				
+				Map.transitNavigation(myAddress,toAddress,'transit');
+			})
+			document.getElementById('toDrive').addEventListener('tap', function() {
+			
+				Map.driveNavigation(myAddress,toAddress,'drive')
+			})
+			document.getElementById('toWalk').addEventListener('tap', function() {
+				Map.walkNavigation(myAddress,toAddress,'walk');
+			})
+			mui.plusReady(function(){
+			    var self = plus.webview.currentWebview();
+			    toAddress = self.toAddress;//获得参数
+			 	var myPosition = self.myPosition;
+			
+			 	//Map.navigation(myPosition,toAddress,'transit');
+				Map.geocodeSearch(new BMap.Point(myPosition.lng,myPosition.lat),function(address){
+					myAddress =address;
+					Map.transitNavigation(myAddress,toAddress,'transit');
+					Map.driveNavigation(myAddress,toAddress,'drive');
+					Map.walkNavigation(myAddress,toAddress,'walk');
+				});
+
+			});
+				
+		</script>
+	</body>
+
+</html>
